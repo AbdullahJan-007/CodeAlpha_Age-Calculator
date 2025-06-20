@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your exact age in years, months, and days">
+    <title>Age Calculator | Find Your Exact Age</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #181a20;
+            --secondary: #23272f;
+            --accent: #4f8cff;
+            --success: #22c55e;
+            --error: #ef4444;
+            --border: #4f8cff99;
+            --text: #23272f;
+            --muted: #4f5b6e;
+            --card-bg: rgba(255,255,255,0.92);
+            --input-bg: #f3f6fa;
+            --input-border: #4f8cff55;
+            --radius: 20px;
+            --shadow: 0 8px 32px 0 #4f8cff33;
+            --mono: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace;
+            --sans: 'Inter', Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+           
+            background: 
+                radial-gradient(ellipse at 80% 10%, #ffe6e6 0%, #f5f7fa 30%, transparent 70%),
+                radial-gradient(ellipse at 20% 90%, #b3c6f7 0%, #f5f7fa 40%, transparent 80%),
+                linear-gradient(120deg, #e0e7ef 0%, #f5f7fa 60%, #ffe6e6 100%);
+            background-blend-mode: lighten;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--sans);
+            color: var(--primary);
+        }
+
+        main {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 70%, rgba(200,220,255,0.55) 100%, rgba(255,230,230,0.45) 100%);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 32px 0 #4f8cff33, 0 1.5px 8px 0 #ffb6b633;
+            padding: 2.5rem 2rem 2rem 2rem;
+            width: min(95%, 410px);
+            margin: 2rem auto;
+            border: 2.5px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 1.7rem;
+            position: relative;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: box-shadow 0.2s;
+        }
+
+        .company-badge {
+            position: absolute;
+            top: -32px;
+            left: 1.5rem;
+            background: linear-gradient(90deg, #4f8cff 0%, #b3c6f7 100%);
+            color: #fff;
+            padding: 0.35rem 1.2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: var(--mono);
+            font-weight: 700;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px #4f8cff33;
+            letter-spacing: 1px;
+            user-select: none;
+        }
+
+        h1 {
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 2.1rem;
+            text-align: left;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px #b3c6f744;
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        legend {
+            font-size: 1.08rem;
+            color: var(--muted);
+            font-family: var(--mono);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.2px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        label {
+            color: var(--muted);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.1px;
+            font-family: var(--sans);
+        }
+
+        input {
+            background: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            border-radius: 10px;
+            color: var(--primary);
+            font-size: 1.08rem;
+            padding: 0.7rem 0.8rem;
+            font-family: var(--mono);
+            transition: border-color 0.2s, background 0.2s;
+            box-shadow: 0 1px 4px #b3c6f733;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #eaf1fb;
+        }
+
+        button {
+            background: linear-gradient(90deg, #4f8cff 0%, #b3c6f7 100%);
+            color: #fff;
+            border: none;
+            padding: 0.95rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.13rem;
+            font-family: var(--mono);
+            font-weight: 700;
+            width: 100%;
+            margin-top: 0.7rem;
+            box-shadow: 0 2px 12px #4f8cff33;
+            transition: background 0.2s, transform 0.12s;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover, button:focus {
+            background: linear-gradient(90deg, #2563eb 0%, #4f8cff 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .error {
+            color: var(--error);
+            font-size: 0.95rem;
+            display: none;
+            font-family: var(--mono);
+            font-weight: 500;
+            margin-top: 0.1rem;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1.5px;
+            background: linear-gradient(90deg, #4f8cff33 0%, #ffe6e6 100%);
+            border: none;
+            margin: 1.2rem 0 0.7rem 0;
+            border-radius: 2px;
+        }
+
+        .result {
+            margin-top: 0.5rem;
+            padding: 1.1rem 1rem 0.7rem 1rem;
+            background: linear-gradient(120deg, #f5f7fa 80%, #b3c6f7 100%);
+            border-radius: 16px;
+            border: 2px solid var(--border);
+            display: none;
+            box-shadow: 0 2px 12px #b3c6f733;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .result h2 {
+            font-size: 1.18rem;
+            margin-bottom: 0.7rem;
+            color: var(--accent);
+            font-family: var(--mono);
+            font-weight: 700;
+            text-align: left;
+            letter-spacing: 0.2px;
+        }
+
+        .age-display {
+            font-size: 1.09rem;
+            font-family: var(--mono);
+            background: rgba(200,220,255,0.25);
+            border-radius: 10px;
+            padding: 0.5rem 0.8rem;
+            margin: 0.2rem 0;
+            border: 1.5px solid #b3c6f7;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 0.3em;
+            box-shadow: 0 1px 4px #b3c6f722;
+        }
+
+        .age-value {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 1.22rem;
+            margin-right: 0.2em;
+            font-family: var(--mono);
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 500px) {
+            main {
+                padding: 1.2rem 0.5rem 1rem 0.5rem;
+            }
+            .company-badge {
+                font-size: 0.93rem;
+                padding: 0.3rem 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="company-badge">CodeAlpha_Age Calculator</div>
+        <h1>Age Calculator</h1>
+        
+        <form id="age-calculator">
+            <fieldset>
+                <legend><span class="visually-hidden">Enter your </span>Date of Birth</legend>
+                
+                <div class="input-group">
+                    <label for="day">Day</label>
+                    <input type="number" id="day" name="day" placeholder="DD" min="1" max="31" required aria-describedby="day-error">
+                    <div class="error" id="day-error" role="alert">Please enter a valid day (1-31)</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="month">Month</label>
+                    <input type="number" id="month" name="month" placeholder="MM" min="1" max="12" required aria-describedby="month-error">
+                    <div class="error" id="month-error" role="alert">Please enter a valid month (1-12)</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" placeholder="YYYY" min="1900" required aria-describedby="year-error">
+                    <div class="error" id="year-error" role="alert">Please enter a valid year (1900-current year)</div>
+                </div>
+            </fieldset>
+            
+            <button type="submit" id="calculate-btn">Calculate Age</button>
+        </form>
+        
+        <section class="result" id="result" aria-live="polite">
+            <h2>Your Age</h2>
+            <div class="age-display"><span class="age-value" id="years">0</span> years</div>
+            <div class="age-display"><span class="age-value" id="months">0</span> months</div>
+            <div class="age-display"><span class="age-value" id="days">0</span> days</div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('age-calculator');
+            const dayInput = document.getElementById('day');
+            const monthInput = document.getElementById('month');
+            const yearInput = document.getElementById('year');
+            const resultSection = document.getElementById('result');
+            
+            const dayError = document.getElementById('day-error');
+            const monthError = document.getElementById('month-error');
+            const yearError = document.getElementById('year-error');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                calculateAge();
+            });
+            
+            function calculateAge() {
+               
+                resetErrors();
+                
+                const day = parseInt(dayInput.value);
+                const month = parseInt(monthInput.value);
+                const year = parseInt(yearInput.value);
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear();
+                
+                let isValid = true;
+                
+                if (isNaN(year) || year < 1900 || year > currentYear) {
+                    showError(yearError, `Please enter a year between 1900 and ${currentYear}`);
+                    isValid = false;
+                }
+                
+                if (isNaN(month) || month < 1 || month > 12) {
+                    showError(monthError, 'Please enter a month between 1 and 12');
+                    isValid = false;
+                }
+                
+                if (isNaN(day) || day < 1 || day > 31) {
+                    showError(dayError, 'Please enter a day between 1 and 31');
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                   
+                    if ([4, 6, 9, 11].includes(month) && day > 30) {
+                        showError(dayError, 'This month only has 30 days');
+                        isValid = false;
+                    }
+                    
+        
+
+                    if (month === 2) {
+                        const isLeapYear = (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
+                        const maxDays = isLeapYear ? 29 : 28;
+                        
+                        if (day > maxDays) {
+                            showError(dayError, `February has ${maxDays} days in ${year}`);
+                            isValid = false;
+                        }
+                    }
+                    
+  
+                    const birthDate = new Date(year, month - 1, day);
+                    if (birthDate > currentDate) {
+                        showError(yearError, 'Birth date cannot be in the future');
+                        isValid = false;
+                    }
+                }
+                
+                if (!isValid) {
+                    resultSection.style.display = 'none';
+                    return;
+                }
+                
+         
+                displayAge(calculateAgeFromDate(new Date(year, month - 1, day)));
+            }
+            
+            function calculateAgeFromDate(birthDate) {
+                const today = new Date();
+                let years = today.getFullYear() - birthDate.getFullYear();
+                let months = today.getMonth() - birthDate.getMonth();
+                let days = today.getDate() - birthDate.getDate();
+                
+                if (days < 0) {
+                    months--;
+                    const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                    days += lastMonth.getDate();
+                }
+                
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                return { years, months, days };
+            }
+            
+            function displayAge(age) {
+                resultSection.style.display = 'flex';
+                document.getElementById('years').textContent = age.years;
+                document.getElementById('months').textContent = age.months;
+                document.getElementById('days').textContent = age.days;
+            }
+            
+            function showError(element, message) {
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+            
+            function resetErrors() {
+                [dayError, monthError, yearError].forEach(error => {
+                    error.style.display = 'none';
+                    error.textContent = '';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
