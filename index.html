@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your exact age in years, months, and days">
+    <title>Age Calculator | Find Your Exact Age</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="space-bg"></canvas>
+    <main>
+        <header>
+            <span class="company-badge">CodeAlpha_Age Calculator</span>
+            <h1>Age Calculator</h1>
+        </header>
+        
+        <section aria-labelledby="dob-legend">
+            <form id="age-calculator">
+                <fieldset>
+                    <legend id="dob-legend"><span class="visually-hidden">Enter your </span>Date of Birth</legend>
+                    
+                    <div class="input-group">
+                        <label for="day">Day</label>
+                        <input type="number" id="day" name="day" placeholder="DD" min="1" max="31" required aria-describedby="day-error">
+                        <span class="error" id="day-error" role="alert">Please enter a valid day (1-31)</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="month">Month</label>
+                        <input type="number" id="month" name="month" placeholder="MM" min="1" max="12" required aria-describedby="month-error">
+                        <span class="error" id="month-error" role="alert">Please enter a valid month (1-12)</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="year">Year</label>
+                        <input type="number" id="year" name="year" placeholder="YYYY" min="1900" required aria-describedby="year-error">
+                        <span class="error" id="year-error" role="alert">Please enter a valid year (1900-current year)</span>
+                    </div>
+                </fieldset>
+                
+                <button type="submit" id="calculate-btn">Calculate Age</button>
+            </form>
+        </section>
+        
+        <section class="result" id="result" aria-live="polite" aria-labelledby="your-age-heading">
+            <h2 id="your-age-heading">Your Age</h2>
+            <output class="age-display"><span class="age-value" id="years">0</span> years</output>
+            <output class="age-display"><span class="age-value" id="months">0</span> months</output>
+            <output class="age-display"><span class="age-value" id="days">0</span> days</output>
+        </section>
+        
+        <footer>
+            <small>&copy; 2025 CodeAlpha. All rights reserved.</small>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
